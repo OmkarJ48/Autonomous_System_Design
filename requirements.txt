@@ -1,0 +1,64 @@
+# ME7027 - Design of Autonomous Systems (Group 3)
+# Python dependencies for the computer-vision, deep-learning and control tooling.
+#
+# The coursework itself was implemented primarily in MATLAB/Simulink (see the
+# MATLAB toolbox list in README.md). This file covers the Python side: dataset
+# preparation, the OpenCV vision pipeline, CNN training/evaluation, sensor
+# characterisation analysis and Quanser QCar SDK work.
+#
+#   python -m venv .venv
+#   source .venv/bin/activate      # Windows: .venv\Scripts\activate
+#   pip install -r requirements.txt
+
+# --- Core numerics and data handling ---
+numpy==1.26.4
+scipy==1.13.1
+pandas==2.2.2
+
+# --- Computer vision (stop sign, traffic light and lane detection) ---
+opencv-contrib-python==4.10.0.84
+scikit-image==0.24.0
+Pillow==10.4.0
+imutils==0.5.4
+
+# --- Deep learning (custom CNN and GoogleNet transfer learning) ---
+# Install the CUDA build of torch/torchvision from https://pytorch.org for GPU
+# training; the PyPI wheels below are CPU-only.
+torch==2.3.1
+torchvision==0.18.1
+tensorflow==2.16.2
+keras==3.4.1
+scikit-learn==1.5.1
+
+# --- Dataset preparation and augmentation ---
+albumentations==1.4.14
+imgaug==0.4.0
+roboflow==1.1.37
+kaggle==1.6.17
+tqdm==4.66.5
+PyYAML==6.0.2
+
+# --- Fuzzy logic navigation controller ---
+scikit-fuzzy==0.4.2
+networkx==3.3
+
+# --- Sensor fusion (Kalman filter for ultrasonic + webcam distance) ---
+filterpy==1.4.5
+
+# --- Plotting and reporting of sensor characterisation results ---
+matplotlib==3.9.2
+seaborn==0.13.2
+
+# --- Notebooks used for analysis ---
+jupyterlab==4.2.5
+ipykernel==6.29.5
+
+# --- Robot / vehicle interfaces ---
+# LEGO EV3 over USB/Bluetooth (MATLAB EV3 support package is the primary route).
+python-ev3dev2==2.1.0.post1
+pyserial==3.5
+
+# The Quanser QCar Python SDK (quanser-apis) and QUARC are licensed and shipped
+# with the QCar hardware; they are NOT available on PyPI. Install them from the
+# Quanser distribution, then uncomment the line below if it is on a local index.
+# quanser-apis==2024.1

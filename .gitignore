@@ -427,3 +427,182 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+##
+## ME7027 - Design of Autonomous Systems (project-specific)
+##
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Testing / coverage / linting caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# Environment files (secrets, Kaggle/Roboflow API keys)
+.env
+.env.*
+!.env.example
+kaggle.json
+roboflow_config.json
+
+# --- MATLAB / Simulink ---
+*.asv
+*.autosave
+*.m~
+slprj/
+sccprj/
+codegen/
+*.slxc
+*.mex*
+*.mlappinstall
+*.mltbx
+octave-workspace
+
+# Simulink autosave and backup files
+*.slx.r*
+*.slx.autosave
+*.mdl.r*
+*.mdl.autosave
+
+# MATLAB Experiment Manager / project scratch
+*.prj.autosave
+resources/project/
+*.mlproj
+
+# --- Datasets, models and training artefacts ---
+# Kaggle / Roboflow / in-lab image corpora are shared out of band, not in git.
+data/
+datasets/
+dataset/
+raw_data/
+processed_data/
+augmented/
+5class_dataset/
+14class_dataset/
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.rar
+
+# Trained networks and checkpoints
+models/
+checkpoints/
+runs/
+logs/
+*.mat
+*.h5
+*.hdf5
+*.ckpt
+*.pt
+*.pth
+*.pb
+*.onnx
+*.tflite
+*.caffemodel
+*.weights
+
+# Keep small, hand-authored .mat configs by exempting them explicitly, e.g.:
+# !config/fuzzy_params.mat
+
+# --- Media: recorded test results and captures ---
+# Detection/lane-following result videos (stopsign_detection.avi etc.)
+*.avi
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.wmv
+*.flv
+
+# Captured frames and generated plots
+captures/
+frames/
+output/
+outputs/
+results/
+figures/
+
+# --- CAD (SolidWorks camera mount) ---
+# Backup, temporary and lock files produced by SolidWorks.
+*.sldprt.bak
+*.sldasm.bak
+*.slddrw.bak
+~$*.sldprt
+~$*.sldasm
+~$*.slddrw
+*.SLDLFP.bak
+swxJRNL.*
+*.CATPart.bak
+
+# Slicer / 3D-printing outputs
+*.gcode
+*.3mf
+*.factory
+
+# --- Office document lock files (docs/ folder) ---
+~$*.docx
+~$*.doc
+~$*.xlsx
+~$*.pptx
+.~lock.*#
+
+# --- OS cruft ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# --- Editors ---
+*.swp
+*.swo
+*~
+.idea/
+
+# --- Keep the submitted reports tracked despite the rules above ---
+!docs/
+!docs/**
