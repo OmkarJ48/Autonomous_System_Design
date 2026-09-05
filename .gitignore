@@ -580,6 +580,13 @@ swxJRNL.*
 *.3mf
 *.factory
 
+# The Visual Studio template near the top of this file ignores *.obj, meaning
+# C++ object files. That pattern would also silently swallow .obj meshes
+# exported from SolidWorks, so re-include those under the CAD directories.
+# (.stl, .step/.stp and .SLDPRT/.SLDASM are unaffected and stay tracked.)
+!cad/**/*.obj
+!CAD/**/*.obj
+
 # --- Office document lock files (docs/ folder) ---
 ~$*.docx
 ~$*.doc
