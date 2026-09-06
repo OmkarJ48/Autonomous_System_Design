@@ -1,0 +1,30 @@
+{
+  // Extensions recommended for working on this coursework in VS Code.
+  // VS Code prompts to install these the first time the folder is opened.
+  "recommendations": [
+    // --- Python: dataset preparation, OpenCV pipeline, QCar SDK scripts ---
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.debugpy",
+    "charliermarsh.ruff",
+    "ms-toolsai.jupyter",
+
+    // --- MATLAB / Simulink: the primary coursework toolchain ---
+    "MathWorks.language-matlab",
+
+    // --- Data and model inspection ---
+    "mechatroner.rainbow-csv",
+    "RandomFractalsInc.vscode-data-preview",
+
+    // --- CAD / 3D preview for the camera mount ---
+    "slevesque.vscode-3dviewer",
+
+    // --- Docs and reports ---
+    "yzhang.markdown-all-in-one",
+    "DavidAnson.vscode-markdownlint",
+
+    // --- General ---
+    "eamodio.gitlens",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}
