@@ -190,22 +190,128 @@ evaluation, and the assessment of navigation strategies.
 
 ```
 .
-├── docs/            Reports and supporting documentation (PDF, DOCX)
+├── .vscode/                     VS Code workspace configuration
+│   ├── extensions.json          Recommended extensions
+│   ├── launch.json              Debug configurations for the scripts below
+│   ├── settings.json            Interpreter, linting, MATLAB and search setup
+│   └── tasks.json               Venv creation, dependency install, env check
+├── docs/                        Reports and supporting documentation
+│   ├── ME7027_..._Group_3_Report.pdf
+│   └── K2441768_..._Individual_Conclusion.docx
+├── scripts/
+│   ├── check_environment.py     Verifies interpreter, packages and Quanser SDK
+│   └── qcar/
+│       ├── qlabs_virtual_qcar.py  Spawn and drive a QCar in Interactive Labs
+│       └── qcar_sensors.py        LiDAR / CSI / RealSense / IMU read loop
 ├── .gitignore
 ├── README.md
-└── requirements.txt Python dependencies for the CV / deep-learning tooling
+└── requirements.txt             Python dependencies
 ```
 
-Source code, datasets, trained models and result videos are added under their
-own directories as the work is committed; large binaries (datasets, `.mat`
-checkpoints, recorded `.avi`/`.mp4` results) are excluded by `.gitignore` and
-should be shared out of band.
+MATLAB sources, datasets, trained models and result videos are added under
+their own directories as the work is committed; large binaries (datasets,
+`.mat` checkpoints, recorded `.avi`/`.mp4` results) are excluded by
+`.gitignore` and should be shared out of band.
 
-## Requirements
+---
 
-### MATLAB / Simulink (primary toolchain)
+## Development environment
 
-Most of the coursework was implemented in MATLAB R2022b or later with:
+Two environments are required to complete the project: **Visual Studio Code**
+for editing, running and debugging, and the **Quanser QCar** software stack
+for the vehicle work. MATLAB/Simulink remains the primary toolchain for the
+coursework itself.
+
+### 1. Visual Studio Code
+
+Install [Visual Studio Code](https://code.visualstudio.com/), then open this
+repository as a folder. VS Code reads the checked-in `.vscode/` configuration
+and offers to install the recommended extensions on first open.
+
+Extensions (declared in [`.vscode/extensions.json`](.vscode/extensions.json)):
+
+| Extension | Purpose |
+| --- | --- |
+| `ms-python.python`, `ms-python.vscode-pylance`, `ms-python.debugpy` | Python editing, IntelliSense and debugging |
+| `charliermarsh.ruff` | Python linting and formatting |
+| `ms-toolsai.jupyter` | Notebooks for sensor-data analysis |
+| `MathWorks.language-matlab` | MATLAB editing, running and debugging inside VS Code |
+| `mechatroner.rainbow-csv` | Reading logged sensor CSVs |
+| `slevesque.vscode-3dviewer` | Previewing the camera-mount STL/OBJ meshes |
+| `yzhang.markdown-all-in-one`, `DavidAnson.vscode-markdownlint` | Documentation |
+| `eamodio.gitlens`, `streetsidesoftware.code-spell-checker` | General |
+
+Set up the Python environment:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python scripts/check_environment.py
+```
+
+The same three steps are available from the Command Palette via
+**Tasks: Run Task** → *Create virtual environment* / *Install Python
+dependencies* / *Check environment*, defined in
+[`.vscode/tasks.json`](.vscode/tasks.json).
+
+`.vscode/settings.json` points the interpreter at `.venv`, adds `scripts/` to
+the analysis path, and downgrades unresolved-import errors to warnings so the
+Quanser imports stay readable on a machine without the QCar software. The
+`MathWorks.language-matlab` extension additionally needs `matlab.installPath`
+set to your local MATLAB root — it is left unset in the committed settings
+because the path is machine-specific:
+
+```jsonc
+// Windows
+"matlab.installPath": "C:\\Program Files\\MATLAB\\R2023b"
+// Linux
+"matlab.installPath": "/usr/local/MATLAB/R2023b"
+```
+
+Debug entry points are pre-wired in
+[`.vscode/launch.json`](.vscode/launch.json): *Check environment*,
+*QCar: virtual (QLabs) drive demo*, *QCar: sensor read loop*, and
+*Python: current file*.
+
+### 2. Quanser QCar environment
+
+The QCar work needs the Quanser software stack. **None of it is on PyPI** —
+it is licensed and distributed by Quanser with the vehicle and with Quanser
+Interactive Labs, so `pip install` will not provide it.
+
+| Component | Role |
+| --- | --- |
+| **Quanser Interactive Labs (QLabs)** | Virtual QCar and simulated environments — the Virtual QCar Simulation in Part 4 |
+| **QUARC** | Real-time control, and the Simulink code-generation target for the QCar |
+| **Quanser Python SDK** — `quanser` (HIL/communications), `pal` (physical and virtual QCar products), `qvl` (Interactive Labs) | Python access to the vehicle and the simulator |
+| **QCar research studio resources** | Reference examples, calibration tools and workspaces |
+
+Setup:
+
+1. Install Quanser Interactive Labs and QUARC from the Quanser distribution
+   supplied with the module, and activate your licence.
+2. Make the Quanser Python packages importable — either run the scripts with
+   the Python interpreter that ships with Quanser, or add the Quanser
+   `python` directory to `PYTHONPATH`.
+3. Confirm the SDK is visible:
+
+   ```bash
+   python scripts/check_environment.py --require-quanser
+   ```
+
+   This exits non-zero and prints what is missing if `quanser`, `pal` or
+   `qvl` cannot be found.
+4. For the physical QCar, connect over the vehicle's Wi-Fi and run the
+   scripts on the onboard computer (Jetson TX2 / Intel i7 NUC class).
+
+Reference documentation ships with the installation, and the product page is
+at <https://www.quanser.com/products/qcar/>. The QCar hardware manual cited
+in the group report is `Qcar_user_manual_system_hardware.pdf`.
+
+### 3. MATLAB / Simulink (primary coursework toolchain)
+
+MATLAB R2022b or later with:
 
 * Image Processing Toolbox
 * Computer Vision Toolbox
@@ -213,29 +319,79 @@ Most of the coursework was implemented in MATLAB R2022b or later with:
 * Fuzzy Logic Toolbox
 * Simulink
 * MATLAB Support Package for LEGO MINDSTORMS EV3 Hardware
-* Experiment Manager (for hyperparameter sweeps)
+* Experiment Manager (for the hyperparameter sweeps in Part 3)
 * Parallel Computing Toolbox (for GPU training)
 
-### Python
+MATLAB files can be edited and run from VS Code through the MathWorks
+extension, but Simulink models (`.slx`) and live scripts (`.mlx`) must be
+opened in MATLAB itself.
 
-Optional Python tooling — dataset preparation, the OpenCV reimplementation of
-the vision pipeline, and QCar SDK work — is pinned in
-[`requirements.txt`](requirements.txt):
-
-```bash
-python -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-The Quanser QCar Python SDK (`quanser-apis`) and QUARC are licensed separately
-and ship with the QCar hardware, so they are not installed from PyPI — see the
-Quanser documentation for your platform.
-
-### Other software
+### 4. Other software
 
 * SolidWorks (camera mount CAD)
 * An FDM slicer and 3D printer for PLA prototypes
+
+---
+
+## Scripts
+
+| Script | What it does | Runs without the Quanser SDK? |
+| --- | --- | --- |
+| [`scripts/check_environment.py`](scripts/check_environment.py) | Reports the interpreter, the required packages and the Quanser SDK; `--require-quanser` makes a missing SDK a failure | Yes — stdlib only |
+| [`scripts/qcar/qlabs_virtual_qcar.py`](scripts/qcar/qlabs_virtual_qcar.py) | Connects to QLabs, spawns a QCar, drives an open-loop manoeuvre, grabs a front RGB frame | No — exits 2 with setup guidance |
+| [`scripts/qcar/qcar_sensors.py`](scripts/qcar/qcar_sensors.py) | Read loop over LiDAR, CSI cameras, RealSense depth and the IMU, printing a running summary | No — exits 2 with setup guidance |
+
+```bash
+python scripts/check_environment.py
+python scripts/qcar/qlabs_virtual_qcar.py --host localhost --duration 8
+python scripts/qcar/qcar_sensors.py --duration 30 --no-realsense
+```
+
+Every script supports `--help`.
+
+> **The two `scripts/qcar/` scripts are scaffolds, not verified coursework
+> code.** They follow the documented Quanser Python API, but that surface
+> changes between SDK releases (`QLabsQCar` vs `QLabsQCar2`, PAL constructor
+> arguments and attribute names). They have been syntax- and CLI-checked and
+> their missing-SDK path is tested, but they have **not** been run against a
+> real QCar or a live QLabs instance. Check the calls against the Quanser
+> Python API documentation for your installed version before relying on them.
+
+---
+
+## References
+
+**Platforms and SDK**
+
+* Quanser QCar product page — <https://www.quanser.com/products/qcar/>
+* Quanser QCar hardware manual — `Qcar_user_manual_system_hardware.pdf`
+  (ships with the QCar)
+* Quanser Interactive Labs and QUARC documentation — installed with the
+  Quanser distribution
+* LEGO MINDSTORMS EV3 hardware poster and sensor pages — cited in full in the
+  References section of the group report
+
+**Tooling**
+
+* Visual Studio Code — <https://code.visualstudio.com/>
+* MATLAB extension for VS Code — <https://marketplace.visualstudio.com/items?itemName=MathWorks.language-matlab>
+* MATLAB Support Package for LEGO MINDSTORMS EV3 Hardware — MathWorks
+* MathWorks, *Creating a colour mask for an image in HSV* — MATLAB Central
+* MathWorks, *Image Augmentation Using Image Processing Toolbox*
+
+**Datasets**
+
+* Kaggle — traffic-light and road-sign corpus (~5000 images)
+* Roboflow — annotated road-sign dataset (~3000 images)
+* In-lab capture — ~4000 images under varied angles and lighting
+
+**CAD**
+
+* Logitech C270 webcam model — GrabCAD
+* Intel RealSense D435 model — GrabCAD
+
+Full citations with access dates are in the References section of the group
+report.
 
 ---
 
