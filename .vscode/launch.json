@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Check environment",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/check_environment.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "QCar: virtual (QLabs) drive demo",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/qcar/qlabs_virtual_qcar.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "QCar: sensor read loop",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/qcar/qcar_sensors.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "args": ["--duration", "10"]
+    },
+    {
+      "name": "Python: current file",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

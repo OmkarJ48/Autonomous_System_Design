@@ -1,0 +1,40 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Create virtual environment",
+      "type": "shell",
+      "command": "python -m venv .venv",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Install Python dependencies",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} -m pip install -r requirements.txt",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Check environment",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} scripts/check_environment.py",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Check environment (including Quanser SDK)",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} scripts/check_environment.py --require-quanser",
+      "problemMatcher": [],
+      "group": "test"
+    }
+  ]
+}
